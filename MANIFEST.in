@@ -1,0 +1,5 @@
+include CHANGES.txt
+include LICENSE.txt
+include TODO.txt
+include archive/test/*
+prune dist
