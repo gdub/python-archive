@@ -10,7 +10,7 @@ class UnrecognizedArchiveFormat(ArchiveException):
     """Error raised when passed file is not a recognized archive format."""
 
 
-def unpack(path, to_path=None):
+def extract(path, to_path=None):
     """
     Unpack the tar or zip file at the specified path to the directory
     specified by to_path.
@@ -20,8 +20,9 @@ def unpack(path, to_path=None):
 
 class Archive(object):
     """
-    Base Archive class.  Implementations should inherit this class.
+    The external API class that encapsulates an archive implementation.
     """
+
     def __init__(self, file):
         self._archive = self._archive_cls(file)(file)
 
@@ -54,6 +55,9 @@ class Archive(object):
 
 
 class BaseArchive(object):
+    """
+    Base Archive class.  Implementations should inherit this class.
+    """
 
     def extract(self):
         raise NotImplementedError
