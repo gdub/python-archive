@@ -10,7 +10,7 @@ class UnrecognizedArchiveFormat(ArchiveException):
     """Error raised when passed file is not a recognized archive format."""
 
 
-def extract(path, to_path=None):
+def extract(path, to_path=''):
     """
     Unpack the tar or zip file at the specified path to the directory
     specified by to_path.
@@ -47,7 +47,7 @@ class Archive(object):
                 "Path not a recognized archive format: %s" % filename)
         return cls
 
-    def extract(self, to_path=None):
+    def extract(self, to_path=''):
         self._archive.extract(to_path)
 
     def list(self):
