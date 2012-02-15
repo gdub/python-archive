@@ -2,11 +2,11 @@ from distutils.core import setup
 
 setup(
     name = 'python-archive',
-    version = '0.1',
+    version = '0.2-dev',
     author = 'Gary Wilson Jr.',
     author_email = 'gary.wilson@gmail.com',
     packages = ['archive', 'archive.test'],
-    url = 'http://code.google.com/p/python-archive/',
+    url = 'https://github.com/gdub/python-archive',
     license = 'LICENSE.txt',
     description = ('Simple library that provides a common interface for'
                    ' extracting zip and tar archives.'),
