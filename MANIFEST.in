@@ -1,5 +1,4 @@
-include CHANGES.txt
-include LICENSE.txt
-include TODO.txt
+include MANIFEST.in
+include *.txt
 include archive/test/*
-prune dist
+recursive-include archive *.py
