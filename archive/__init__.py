@@ -1,7 +1,9 @@
 import os
+import sys
 import tarfile
 import zipfile
 
+IS_PY2 = sys.version_info[0] == 2
 
 class ArchiveException(Exception):
     """Base exception class for all archive errors."""
@@ -29,7 +31,10 @@ class Archive(object):
     @staticmethod
     def _archive_cls(file):
         cls = None
-        if isinstance(file, basestring):
+        filename = None
+        if IS_PY2 and isinstance(file, basestring):
+            filename = file
+        elif isinstance(file, str):  # Python 3 and above
             filename = file
         else:
             try:
@@ -58,6 +63,9 @@ class BaseArchive(object):
     """
     Base Archive class.  Implementations should inherit this class.
     """
+    def __del__(self):
+        if hasattr(self, "_archive"):
+            self._archive.close()
 
     def extract(self):
         raise NotImplementedError
@@ -76,7 +84,6 @@ class TarArchive(BaseArchive):
 
     def extract(self, to_path):
         self._archive.extractall(to_path)
-
 
 
 class ZipArchive(BaseArchive):

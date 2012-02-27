@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 import os
 import shutil
 import tempfile
 import unittest
+from os.path import isfile, join as pathjoin
 
-from archive import Archive, extract
-
+from archive import Archive, IS_PY2, extract
 
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -17,7 +18,7 @@ class ArchiveTester(object):
         Create temporary directory for testing extraction.
         """
         self.tmpdir = tempfile.mkdtemp()
-        self.archive_path = os.path.join(TEST_DIR, self.archive)
+        self.archive_path = pathjoin(TEST_DIR, self.archive)
         # Always start off in TEST_DIR.
         os.chdir(TEST_DIR)
 
@@ -46,12 +47,12 @@ class ArchiveTester(object):
         self.check_files(self.tmpdir)
 
     def check_files(self, tmpdir):
-        self.assertTrue(os.path.isfile(os.path.join(self.tmpdir, '1')))
-        self.assertTrue(os.path.isfile(os.path.join(self.tmpdir, '2')))
-        self.assertTrue(os.path.isfile(os.path.join(self.tmpdir, 'foo', '1')))
-        self.assertTrue(os.path.isfile(os.path.join(self.tmpdir, 'foo', '2')))
-        self.assertTrue(os.path.isfile(os.path.join(self.tmpdir, 'foo', 'bar', '1')))
-        self.assertTrue(os.path.isfile(os.path.join(self.tmpdir, 'foo', 'bar', '2')))
+        self.assertTrue(isfile(pathjoin(self.tmpdir, '1')))
+        self.assertTrue(isfile(pathjoin(self.tmpdir, '2')))
+        self.assertTrue(isfile(pathjoin(self.tmpdir, 'foo', '1')))
+        self.assertTrue(isfile(pathjoin(self.tmpdir, 'foo', '2')))
+        self.assertTrue(isfile(pathjoin(self.tmpdir, 'foo', 'bar', '1')))
+        self.assertTrue(isfile(pathjoin(self.tmpdir, 'foo', 'bar', '2')))
 
 
 class TestZip(ArchiveTester, unittest.TestCase):
@@ -68,3 +69,16 @@ class TestGzipTar(ArchiveTester, unittest.TestCase):
 
 class TestBzip2Tar(ArchiveTester, unittest.TestCase):
     archive = 'foobar.tar.bz2'
+
+
+class TestNonAsciiNamedTar(ArchiveTester, unittest.TestCase):
+    archive = 'アーカイブ.tgz'
+
+
+if IS_PY2:
+    _UNICODE_NAME = unicode('アーカイブ.zip', "utf-8")
+else:
+    _UNICODE_NAME = 'アーカイブ.zip'
+
+class TestUnicodeNamedZip(ArchiveTester, unittest.TestCase):
+    archive = _UNICODE_NAME

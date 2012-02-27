@@ -25,4 +25,5 @@ setup(
     description = ('Simple library that provides a common interface for'
                    ' extracting zip and tar archives.'),
     long_description = open('README.txt').read(),
+    tests_require=["tox", "pytest", "pep8"],
 )
