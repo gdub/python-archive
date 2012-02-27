@@ -72,13 +72,12 @@ class TestBzip2Tar(ArchiveTester, unittest.TestCase):
 
 
 class TestNonAsciiNamedTar(ArchiveTester, unittest.TestCase):
-    archive = 'アーカイブ.tgz'
-
+    archive = '圧縮.tgz'
 
 if IS_PY2:
-    _UNICODE_NAME = unicode('アーカイブ.zip', "utf-8")
+    _UNICODE_NAME = unicode('圧縮.zip', 'utf-8')
 else:
-    _UNICODE_NAME = 'アーカイブ.zip'
+    _UNICODE_NAME = '圧縮.zip'
 
 class TestUnicodeNamedZip(ArchiveTester, unittest.TestCase):
     archive = _UNICODE_NAME
