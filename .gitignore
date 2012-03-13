@@ -1,1 +1,7 @@
+*.egg-info/
+.tox/
+build/
+dist/
+MANIFEST
+*.swp
 *.pyc
