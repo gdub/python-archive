@@ -5,3 +5,6 @@ dist/
 MANIFEST
 *.swp
 *.pyc
+.project
+.pydevproject
+.settings
