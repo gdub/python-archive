@@ -21,10 +21,6 @@ Using the ``Archive`` class::
     a = Archive('files.tar.gz')
     a.extract()
 
-    # Passing file-like objects are also supported.
-    f = open('files.tar.gz', 'rb')
-    Archive(f).extract()
-
 Using the ``extract`` convenience function::
 
     from archive import extract
@@ -32,6 +28,20 @@ Using the ``extract`` convenience function::
     extract('files.tar.gz')
     # Extract in directory 'unpack_dir'.
     extract('files.tar.gz', 'unpack_dir')
+
+More examples
+-------------
+Passing a file-like object is also supported::
+
+    f = open('files.tar.gz', 'rb')
+    Archive(f).extract()
+
+If a file does not have the correct extension, or is not recognized correctly,
+you may try explicitly specifying an extension (with leading period)::
+
+    Archive('files.wrongext', ext='.tar.gz').extract()
+    # or
+    extract('files.wrongext', ext='.tar.gz')
 
 
 Similar tools

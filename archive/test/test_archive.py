@@ -13,7 +13,9 @@ TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class ArchiveTester(object):
+
     archive = None
+    ext = ''
 
     def setUp(self):
         """
@@ -31,31 +33,31 @@ class ArchiveTester(object):
         shutil.rmtree(self.tmpdir)
 
     def test_extract_method(self):
-        Archive(self.archive).extract(self.tmpdir)
+        Archive(self.archive, ext=self.ext).extract(self.tmpdir)
         self.check_files(self.tmpdir)
 
     def test_extract_method_fileobject(self):
         f = open(self.archive, 'rb')
-        Archive(f).extract(self.tmpdir)
+        Archive(f, ext=self.ext).extract(self.tmpdir)
         self.check_files(self.tmpdir)
 
     def test_extract_method_no_to_path(self):
         os.chdir(self.tmpdir)
-        Archive(self.archive_path).extract()
+        Archive(self.archive_path, ext=self.ext).extract()
         self.check_files(self.tmpdir)
 
     def test_extract_function(self):
-        extract(self.archive_path, self.tmpdir)
+        extract(self.archive_path, self.tmpdir, ext=self.ext)
         self.check_files(self.tmpdir)
 
     def test_extract_function_fileobject(self):
         f = open(self.archive_path, 'rb')
-        extract(f, self.tmpdir)
+        extract(f, self.tmpdir, ext=self.ext)
         self.check_files(self.tmpdir)
 
     def test_extract_function_no_to_path(self):
         os.chdir(self.tmpdir)
-        extract(self.archive_path)
+        extract(self.archive_path, ext=self.ext)
         self.check_files(self.tmpdir)
 
     def check_files(self, tmpdir):
@@ -93,3 +95,8 @@ else:
 
 class TestUnicodeNamedZip(ArchiveTester, unittest.TestCase):
     archive = _UNICODE_NAME
+
+
+class TestExplicitExt(ArchiveTester, unittest.TestCase):
+    archive = 'foobar_tar_gz'
+    ext = '.tar.gz'

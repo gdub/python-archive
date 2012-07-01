@@ -13,12 +13,12 @@ class UnrecognizedArchiveFormat(ArchiveException):
     """Error raised when passed file is not a recognized archive format."""
 
 
-def extract(path, to_path=''):
+def extract(path, to_path='', ext=''):
     """
     Unpack the tar or zip file at the specified path to the directory
     specified by to_path.
     """
-    Archive(path).extract(to_path)
+    Archive(path, ext=ext).extract(to_path)
 
 
 class Archive(object):
@@ -26,11 +26,21 @@ class Archive(object):
     The external API class that encapsulates an archive implementation.
     """
 
-    def __init__(self, file):
-        self._archive = self._archive_cls(file)(file)
+    def __init__(self, file, ext=''):
+        """
+        Arguments:
+        * 'file' can be a string path to a file or a file-like object.
+        * Optional 'ext' argument can be given to override the file-type
+          guess that is normally performed using the file extension of the
+          given 'file'.  Should start with a dot, e.g. '.tar.gz'.
+        """
+        self._archive = self._archive_cls(file, ext=ext)(file)
 
     @staticmethod
-    def _archive_cls(file):
+    def _archive_cls(file, ext=''):
+        """
+        Return the proper Archive implementation class, based on the file type.
+        """
         cls = None
         filename = None
         if is_string(file):
@@ -41,7 +51,8 @@ class Archive(object):
             except AttributeError:
                 raise UnrecognizedArchiveFormat(
                     "File object not a recognized archive format.")
-        base, tail_ext = os.path.splitext(filename.lower())
+        lookup_filename = filename + ext
+        base, tail_ext = os.path.splitext(lookup_filename.lower())
         cls = extension_map.get(tail_ext)
         if not cls:
             base, ext = os.path.splitext(base)
