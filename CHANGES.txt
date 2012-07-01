@@ -5,6 +5,7 @@ Changelog
 
 Version 0.2 - In development
 ============================
+* Added Python 3 compatibility.
 * Added support for passing file-like objects instead of just a file path.
 
 
