@@ -3,7 +3,8 @@ import sys
 import tarfile
 import zipfile
 
-IS_PY2 = sys.version_info[0] == 2
+from archive.compat import IS_PY2, is_string
+
 
 class ArchiveException(Exception):
     """Base exception class for all archive errors."""
@@ -32,9 +33,7 @@ class Archive(object):
     def _archive_cls(file):
         cls = None
         filename = None
-        if IS_PY2 and isinstance(file, basestring):
-            filename = file
-        elif isinstance(file, str):  # Python 3 and above
+        if is_string(file):
             filename = file
         else:
             try:
@@ -77,7 +76,11 @@ class BaseArchive(object):
 class TarArchive(BaseArchive):
 
     def __init__(self, file):
-        self._archive = tarfile.open(file)
+        # tarfile's open uses different parameters for file path vs. file obj.
+        if is_string(file):
+            self._archive = tarfile.open(name=file)
+        else:
+            self._archive = tarfile.open(fileobj=file)
 
     def list(self, *args, **kwargs):
         self._archive.list(*args, **kwargs)
@@ -89,6 +92,7 @@ class TarArchive(BaseArchive):
 class ZipArchive(BaseArchive):
 
     def __init__(self, file):
+        # ZipFile's 'file' parameter can be path (string) or file-like obj.
         self._archive = zipfile.ZipFile(file)
 
     def list(self, *args, **kwargs):

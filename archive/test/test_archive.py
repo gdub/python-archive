@@ -5,7 +5,9 @@ import tempfile
 import unittest
 from os.path import isfile, join as pathjoin
 
-from archive import Archive, IS_PY2, extract
+from archive.compat import IS_PY2
+from archive import Archive, extract
+
 
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -32,6 +34,11 @@ class ArchiveTester(object):
         Archive(self.archive).extract(self.tmpdir)
         self.check_files(self.tmpdir)
 
+    def test_extract_method_fileobject(self):
+        f = open(self.archive, 'rb')
+        Archive(f).extract(self.tmpdir)
+        self.check_files(self.tmpdir)
+
     def test_extract_method_no_to_path(self):
         os.chdir(self.tmpdir)
         Archive(self.archive_path).extract()
@@ -39,6 +46,11 @@ class ArchiveTester(object):
 
     def test_extract_function(self):
         extract(self.archive_path, self.tmpdir)
+        self.check_files(self.tmpdir)
+
+    def test_extract_function_fileobject(self):
+        f = open(self.archive_path, 'rb')
+        extract(f, self.tmpdir)
         self.check_files(self.tmpdir)
 
     def test_extract_function_no_to_path(self):

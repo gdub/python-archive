@@ -17,8 +17,13 @@ Example usage
 Using the ``Archive`` class::
 
     from archive import Archive
+
     a = Archive('files.tar.gz')
     a.extract()
+
+    # Passing file-like objects are also supported.
+    f = open('files.tar.gz', 'rb')
+    Archive(f).extract()
 
 Using the ``extract`` convenience function::
 
