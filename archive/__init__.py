@@ -12,13 +12,19 @@ class ArchiveException(Exception):
 class UnrecognizedArchiveFormat(ArchiveException):
     """Error raised when passed file is not a recognized archive format."""
 
+class UnsafeArchive(ArchiveException):
+    """
+    Error raised when passed file contains paths that would be extracted
+    outside of the target directory.
+    """
 
-def extract(path, to_path='', ext=''):
+
+def extract(path, to_path='', ext='', **kwargs):
     """
     Unpack the tar or zip file at the specified path to the directory
     specified by to_path.
     """
-    Archive(path, ext=ext).extract(to_path)
+    Archive(path, ext=ext).extract(to_path, **kwargs)
 
 
 class Archive(object):
@@ -62,7 +68,11 @@ class Archive(object):
                 "Path not a recognized archive format: %s" % filename)
         return cls
 
-    def extract(self, to_path=''):
+    def extract(self, to_path='', method='safe'):
+        if method == 'safe':
+            self._archive.check_files(to_path)
+        else:
+            raise ValueError("Invalid method option")
         self._archive.extract(to_path)
 
     def list(self):
@@ -77,11 +87,46 @@ class BaseArchive(object):
         if hasattr(self, "_archive"):
             self._archive.close()
 
-    def extract(self):
-        raise NotImplementedError
-
     def list(self):
-        raise NotImplementedError
+        raise NotImplementedError()
+
+    def filenames(self):
+        """
+        Return a list of the filenames contained in the archive.
+        """
+        raise NotImplementedError()
+
+    def _extract(self, to_path):
+        """
+        Performs the actual extraction.  Separate from 'extract' method so that
+        we don't recurse when subclasses don't declare their own 'extract'
+        method.
+        """
+        self._archive.extractall(to_path)
+
+    def extract(self, to_path, method='safe'):
+        if method == 'safe':
+            self.check_files(to_path)
+        else:
+            raise ValueError("Invalid method option")
+        self._extract(to_path)
+
+    def check_files(self, to_path=None):
+        """
+        Check that all of the files contained in the archive are within the
+        target directory.
+        """
+        if to_path:
+            target_path = os.path.normpath(os.path.realpath(to_path))
+        else:
+            target_path = os.getcwd()
+        for filename in self.filenames():
+            extract_path = os.path.join(target_path, filename)
+            extract_path = os.path.normpath(os.path.realpath(extract_path))
+            if not extract_path.startswith(target_path):
+                raise UnsafeArchive(
+                    "Archive member destination is outside the target"
+                    " directory.  member: %s" % filename)
 
 
 class TarArchive(BaseArchive):
@@ -96,8 +141,8 @@ class TarArchive(BaseArchive):
     def list(self, *args, **kwargs):
         self._archive.list(*args, **kwargs)
 
-    def extract(self, to_path):
-        self._archive.extractall(to_path)
+    def filenames(self):
+        return self._archive.getnames()
 
 
 class ZipArchive(BaseArchive):
@@ -109,9 +154,8 @@ class ZipArchive(BaseArchive):
     def list(self, *args, **kwargs):
         self._archive.printdir(*args, **kwargs)
 
-    def extract(self, to_path):
-        self._archive.extractall(to_path)
-
+    def filenames(self):
+        return self._archive.namelist()
 
 extension_map = {
     '.egg': ZipArchive,
