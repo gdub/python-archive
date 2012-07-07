@@ -9,8 +9,10 @@ from archive.compat import IS_PY2, is_string
 class ArchiveException(Exception):
     """Base exception class for all archive errors."""
 
+
 class UnrecognizedArchiveFormat(ArchiveException):
     """Error raised when passed file is not a recognized archive format."""
+
 
 class UnsafeArchive(ArchiveException):
     """

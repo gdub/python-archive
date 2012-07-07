@@ -93,10 +93,12 @@ class TestBzip2Tar(ArchiveTester, unittest.TestCase):
 class TestNonAsciiNamedTar(ArchiveTester, unittest.TestCase):
     archive = '圧縮.tgz'
 
+
 if IS_PY2:
     _UNICODE_NAME = unicode('圧縮.zip', 'utf-8')
 else:
     _UNICODE_NAME = '圧縮.zip'
+
 
 class TestUnicodeNamedZip(ArchiveTester, unittest.TestCase):
     archive = _UNICODE_NAME
@@ -117,28 +119,30 @@ class UnsafeArchiveTester(ArchiveTester):
     """
 
     def test_extract_method(self):
-        self.assertRaises(UnsafeArchive,
-            super(UnsafeArchiveTester, self).test_extract_method)
+        parent = super(UnsafeArchiveTester, self)
+        self.assertRaises(UnsafeArchive, parent.test_extract_method)
 
     def test_extract_method_fileobject(self):
-        self.assertRaises(UnsafeArchive,
-            super(UnsafeArchiveTester, self).test_extract_method_fileobject)
+        parent = super(UnsafeArchiveTester, self)
+        self.assertRaises(UnsafeArchive, parent.test_extract_method_fileobject)
 
     def test_extract_method_no_to_path(self):
-        self.assertRaises(UnsafeArchive,
-            super(UnsafeArchiveTester, self).test_extract_method_no_to_path)
+        parent = super(UnsafeArchiveTester, self)
+        self.assertRaises(UnsafeArchive, parent.test_extract_method_no_to_path)
 
     def test_extract_function(self):
-        self.assertRaises(UnsafeArchive,
-            super(UnsafeArchiveTester, self).test_extract_function)
+        parent = super(UnsafeArchiveTester, self)
+        self.assertRaises(UnsafeArchive, parent.test_extract_function)
 
     def test_extract_function_fileobject(self):
+        parent = super(UnsafeArchiveTester, self)
         self.assertRaises(UnsafeArchive,
-            super(UnsafeArchiveTester, self).test_extract_function_fileobject)
+                          parent.test_extract_function_fileobject)
 
     def test_extract_function_no_to_path(self):
+        parent = super(UnsafeArchiveTester, self)
         self.assertRaises(UnsafeArchive,
-            super(UnsafeArchiveTester, self).test_extract_function_no_to_path)
+                          parent.test_extract_function_no_to_path)
 
 
 class TestOutsideRelative(UnsafeArchiveTester, unittest.TestCase):
