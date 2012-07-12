@@ -21,7 +21,7 @@ setup(
     version = VERSION,
     classifiers = CLASSIFIERS,
     author = 'Gary Wilson Jr.',
-    author_email = 'gary.wilson@gmail.com',
+    author_email = 'gary@thegarywilson.com',
     packages = ['archive', 'archive.test'],
     url = 'https://github.com/gdub/python-archive',
     license = 'MIT License',
