@@ -1,4 +1,4 @@
 include MANIFEST.in
 include *.txt
-include archive/test/*
+include archive/test/files/*
 recursive-include archive *.py

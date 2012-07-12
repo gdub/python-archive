@@ -68,14 +68,14 @@ class ArchiveTester(TempDirMixin):
 
     def setUp(self):
         super(ArchiveTester, self).setUp()
-        self.archive_path = pathjoin(TEST_DIR, self.archive)
+        self.archive_path = pathjoin(TEST_DIR, 'files', self.archive)
 
     def test_extract_method(self):
-        Archive(self.archive, ext=self.ext).extract(self.tmpdir)
+        Archive(self.archive_path, ext=self.ext).extract(self.tmpdir)
         self.check_files(self.tmpdir)
 
     def test_extract_method_fileobject(self):
-        f = open(self.archive, 'rb')
+        f = open(self.archive_path, 'rb')
         Archive(f, ext=self.ext).extract(self.tmpdir)
         self.check_files(self.tmpdir)
 
@@ -184,9 +184,9 @@ class UnsafeArchiveTester(ArchiveTester):
 
 class TestOutsideRelative(UnsafeArchiveTester, unittest.TestCase):
     """An archive that goes outside the destination using relative paths."""
-    archive = pathjoin('files', 'bad', 'relative.tar.gz')
+    archive = pathjoin('bad', 'relative.tar.gz')
 
 
 class TestOutsideAbsolute(UnsafeArchiveTester, unittest.TestCase):
     """An archive that goes outside the destination using absolute paths."""
-    archive = pathjoin('files', 'bad', 'absolute.tar.gz')
+    archive = pathjoin('bad', 'absolute.tar.gz')
