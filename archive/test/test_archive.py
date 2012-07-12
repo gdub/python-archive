@@ -6,7 +6,7 @@ import unittest
 from os.path import isfile, join as pathjoin
 
 from archive.compat import IS_PY2
-from archive import Archive, extract, UnsafeArchive
+from archive import Archive, extract, UnsafeArchive, UnrecognizedArchiveFormat
 
 
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -59,6 +59,13 @@ class ArchiveTester(object):
         f = open(self.archive_path, 'rb')
         extract(f, self.tmpdir, ext=self.ext)
         self.check_files(self.tmpdir)
+
+    def test_extract_function_bad_fileobject(self):
+        class File:
+            pass
+        f = File()
+        self.assertRaises(UnrecognizedArchiveFormat, extract,
+                          (f, self.tmpdir), {'ext': self.ext})
 
     def test_extract_function_no_to_path(self):
         os.chdir(self.tmpdir)
