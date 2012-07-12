@@ -70,12 +70,8 @@ class Archive(object):
                 "Path not a recognized archive format: %s" % filename)
         return cls
 
-    def extract(self, to_path='', method='safe'):
-        if method == 'safe':
-            self._archive.check_files(to_path)
-        else:
-            raise ValueError("Invalid method option")
-        self._archive.extract(to_path)
+    def extract(self, *args, **kwargs):
+        self._archive.extract(*args, **kwargs)
 
     def list(self):
         self._archive.list()
@@ -106,7 +102,7 @@ class BaseArchive(object):
         """
         self._archive.extractall(to_path)
 
-    def extract(self, to_path, method='safe'):
+    def extract(self, to_path='', method='safe'):
         if method == 'safe':
             self.check_files(to_path)
         else:
