@@ -3,8 +3,8 @@ Changelog
 =========
 
 
-Version 0.2 - In development
-============================
+Version 0.2 - 2012-07-12
+========================
 * Added Python 3 compatibility.
 * Added support for passing file-like objects instead of just a file path.
 * Added the ability to override the file-type guess performed using a file's

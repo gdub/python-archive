@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-VERSION = '0.2-dev'
+VERSION = '0.2'
 
 CLASSIFIERS = [
     'Development Status :: 3 - Alpha',
