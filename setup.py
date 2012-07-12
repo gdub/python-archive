@@ -27,6 +27,6 @@ setup(
     license = 'MIT License',
     description = ('Simple library that provides a common interface for'
                    ' extracting zip and tar archives.'),
-    long_description = open('README.txt').read(),
+    long_description = open('README.rst').read(),
     tests_require=["tox", "pytest", "pep8"],
 )
