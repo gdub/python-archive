@@ -10,6 +10,9 @@ action.  Supported file formats include:
 * Tar and compressed tar formats: ``.tar``, ``.tar.gz``, ``.tgz``,
   ``.tar.bz2``, ``.tz2``.
 
+python-archive is compatible and tested with Python versions 2.5, 2.6,
+and 3.2.
+
 
 Example usage
 =============
