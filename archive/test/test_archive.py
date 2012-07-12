@@ -12,17 +12,17 @@ from archive import Archive, extract, UnsafeArchive, UnrecognizedArchiveFormat
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-class ArchiveTester(object):
-
-    archive = None
-    ext = ''
+class TempDirMixin(object):
+    """
+    Mixin class for TestCase subclasses to set up and tear down a temporary
+    directory for unpacking archives during tests.
+    """
 
     def setUp(self):
         """
         Create temporary directory for testing extraction.
         """
         self.tmpdir = tempfile.mkdtemp()
-        self.archive_path = pathjoin(TEST_DIR, self.archive)
         # Always start off in TEST_DIR.
         os.chdir(TEST_DIR)
 
@@ -31,6 +31,27 @@ class ArchiveTester(object):
         Clean up temporary directory.
         """
         shutil.rmtree(self.tmpdir)
+
+
+class BasicTests(TempDirMixin, unittest.TestCase):
+
+    def test_Archive_instantiation_unrecognized_ext(self):
+        f = pathjoin(TEST_DIR, 'files', 'bad', 'unrecognized.txt')
+        self.assertRaises(UnrecognizedArchiveFormat, Archive, f)
+
+
+class ArchiveTester(TempDirMixin):
+    """
+    A mixin class to be used for testing many Archive methods for a single
+    archive file.
+    """
+
+    archive = None
+    ext = ''
+
+    def setUp(self):
+        super(ArchiveTester, self).setUp()
+        self.archive_path = pathjoin(TEST_DIR, self.archive)
 
     def test_extract_method(self):
         Archive(self.archive, ext=self.ext).extract(self.tmpdir)
