@@ -160,12 +160,19 @@ class ZipArchive(BaseArchive):
         return self._archive.namelist()
 
 extension_map = {
+    '.docx': ZipArchive,
     '.egg': ZipArchive,
     '.jar': ZipArchive,
+    '.odg': ZipArchive,
+    '.odp': ZipArchive,
+    '.ods': ZipArchive,
+    '.odt': ZipArchive,
+    '.pptx': ZipArchive,
     '.tar': TarArchive,
     '.tar.bz2': TarArchive,
     '.tar.gz': TarArchive,
     '.tgz': TarArchive,
     '.tz2': TarArchive,
+    '.xlsx': ZipArchive,
     '.zip': ZipArchive,
 }
