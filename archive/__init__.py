@@ -105,6 +105,8 @@ class BaseArchive(object):
     def extract(self, to_path='', method='safe'):
         if method == 'safe':
             self.check_files(to_path)
+        elif method == 'insecure':
+            pass
         else:
             raise ValueError("Invalid method option")
         self._extract(to_path)

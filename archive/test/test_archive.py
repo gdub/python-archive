@@ -32,12 +32,29 @@ class TempDirMixin(object):
         """
         shutil.rmtree(self.tmpdir)
 
+    def check_files(self, tmpdir):
+        self.assertTrue(isfile(pathjoin(tmpdir, '1')))
+        self.assertTrue(isfile(pathjoin(tmpdir, '2')))
+        self.assertTrue(isfile(pathjoin(tmpdir, 'foo', '1')))
+        self.assertTrue(isfile(pathjoin(tmpdir, 'foo', '2')))
+        self.assertTrue(isfile(pathjoin(tmpdir, 'foo', 'bar', '1')))
+        self.assertTrue(isfile(pathjoin(tmpdir, 'foo', 'bar', '2')))
 
-class BasicTests(TempDirMixin, unittest.TestCase):
+
+class MiscTests(TempDirMixin, unittest.TestCase):
 
     def test_Archive_instantiation_unrecognized_ext(self):
         f = pathjoin(TEST_DIR, 'files', 'bad', 'unrecognized.txt')
         self.assertRaises(UnrecognizedArchiveFormat, Archive, f)
+
+    def test_extract_method_insecure(self):
+        """
+        Tests that the insecure extract method indeed unpacks absolute paths
+        outside the target directory.
+        """
+        f = pathjoin('files', 'bad', 'absolute.tar.gz')
+        Archive(f).extract(self.tmpdir, method='insecure')
+        self.check_files('/tmp')
 
 
 class ArchiveTester(TempDirMixin):
@@ -92,14 +109,6 @@ class ArchiveTester(TempDirMixin):
         os.chdir(self.tmpdir)
         extract(self.archive_path, ext=self.ext)
         self.check_files(self.tmpdir)
-
-    def check_files(self, tmpdir):
-        self.assertTrue(isfile(pathjoin(self.tmpdir, '1')))
-        self.assertTrue(isfile(pathjoin(self.tmpdir, '2')))
-        self.assertTrue(isfile(pathjoin(self.tmpdir, 'foo', '1')))
-        self.assertTrue(isfile(pathjoin(self.tmpdir, 'foo', '2')))
-        self.assertTrue(isfile(pathjoin(self.tmpdir, 'foo', 'bar', '1')))
-        self.assertTrue(isfile(pathjoin(self.tmpdir, 'foo', 'bar', '2')))
 
 
 class TestZip(ArchiveTester, unittest.TestCase):

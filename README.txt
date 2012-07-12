@@ -32,6 +32,15 @@ Using the ``extract`` convenience function::
     # Extract in directory 'unpack_dir'.
     extract('files.tar.gz', 'unpack_dir')
 
+By default, an ``archive.UnsafeArchive`` exception will be raised if any
+file(s) in the archive would be unpacked outside of the target directory
+(e.g. the archive contains absolute paths or relative paths that navigate up
+and out of the target directory).  If you can trust the source of your archive
+files, then it's possible to override this behavior, e.g.::
+
+    extract('files.tar.gz', method='insecure')
+
+
 More examples
 -------------
 Passing a file-like object is also supported::
