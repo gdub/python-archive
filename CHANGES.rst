@@ -3,6 +3,11 @@ Changelog
 =========
 
 
+In Development
+==============
+* Moved tests outside of the archive package directory.
+
+
 Version 0.2 - 2012-07-12
 ========================
 * Added Python 3 compatibility.

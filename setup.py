@@ -22,7 +22,7 @@ setup(
     classifiers = CLASSIFIERS,
     author = 'Gary Wilson Jr.',
     author_email = 'gary@thegarywilson.com',
-    packages = ['archive', 'archive.test'],
+    packages = ['archive'],
     url = 'https://github.com/gdub/python-archive',
     license = 'MIT License',
     description = ('Simple library that provides a common interface for'
